@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">DZ16Notifications</string>
+    <string name="infoStr">Информация о приложении</string>
+    <string name="exit">Выход из приложения</string>
+    <string name="simple_notification_btn">Простое уведомление</string>
+    <string name="big_text_style_notification">Уведомление с длинным текстом</string>
+    <string name="big_picture_style_notification">Уведомление с большим изображением</string>
+    <string name="inbox_style_notification">Уведомление в стиле почтового сообщения</string>
+    <string name="action_notification">Уведомление с кнопками действия</string>
+    <string name="remove_notification_btn">Удалить последнее уведомление!</string>
+    <string name="messaging_style_notification">Уведомление в стиле переписки</string>
+
+    <string name="big_text">
+        Что такое Lorem Ipsum?
+        Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне.
+        Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века.
+        В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов,
+        используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил
+        без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации
+        в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и,
+        в более недавнее время, программы электронной вёрстки типа Aldus PageMaker,
+        в шаблонах которых используется Lorem Ipsum.
+    </string>
+
+</resources>
