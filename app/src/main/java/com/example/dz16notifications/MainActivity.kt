@@ -88,8 +88,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -136,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 .setSmallIcon(R.drawable.ic_simple_notification)
                 .setLargeIcon(getBitmapFromResource(R.drawable.ic_simple_notification))
                 .setContentTitle(getString(R.string.simple_notification_btn))
-                .setContentText("Тут текст обычного уведомления!")
+                .setContentText("Текст обычного уведомления - Внимание! Ахтунг!!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
@@ -185,10 +183,10 @@ class MainActivity : AppCompatActivity() {
                 .setContentText("Внутри какой-то список")
                 .setSubText("Список")
                 .setStyle(NotificationCompat.InboxStyle()
-                    .addLine("строка №1")
-                    .addLine("строка №2")
-                    .addLine("строка №3")
-                    .addLine("строка №4"))
+                    .addLine("Я вас любил")
+                    .addLine("Любовь еще быть может")
+                    .addLine("В душе моей осталась насовсем")
+                    .addLine("Но пусть она вас больше не тревожит"))
                 .setContentTitle(getString(R.string.inbox_style_notification))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
@@ -202,7 +200,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.messagingStyleNotificationBtn.setOnClickListener {
             val user = Person.Builder().setName("Вы").build()
-            val personOne = Person.Builder().setName("Леша").build()
+            val personOne = Person.Builder().setName("Марь Иванна").build()
 
 
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -211,10 +209,10 @@ class MainActivity : AppCompatActivity() {
                 .setSubText("Список")
                 .setStyle(NotificationCompat.MessagingStyle(user)
                     .setConversationTitle("Какая-нибудь переписка")
-                    .addMessage("Привет!", System.currentTimeMillis(), personOne)
-                    .addMessage("Здорова", System.currentTimeMillis(), user)
-                    .addMessage("Как дела?", System.currentTimeMillis(), user)
-                    .addMessage("Отлично", System.currentTimeMillis(), personOne)
+                    .addMessage("Здравствуйте!", System.currentTimeMillis(), personOne)
+                    .addMessage("Добрый день", System.currentTimeMillis(), user)
+                    .addMessage("Мой что то опять натворил в школе??", System.currentTimeMillis(), user)
+                    .addMessage("Завтра к директору!!! Разбил окно!", System.currentTimeMillis(), personOne)
                 )
                 .setContentTitle(getString(R.string.messaging_style_notification))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -235,7 +233,7 @@ class MainActivity : AppCompatActivity() {
                 DeleteNotificationReceiver::class.java
             )
             deleteNotificationIntent.apply {
-                action = "com.kodiiiofc.urbanuniversity.natificationslecture.ACTION_DISMISS_NOTIFICATION"
+                action = "com.example.dz16notifications.ACTION_DISMISS_NOTIFICATION"
                 putExtra("NOTIFICATION_ID", notificationCounter)
             }
 
