@@ -24,6 +24,7 @@ import androidx.core.app.NotificationManagerCompat
 
 import com.example.dz16notifications.databinding.ActivityMainBinding
 import android.Manifest
+import android.net.Uri
 import androidx.core.app.Person
 
 
@@ -113,6 +114,10 @@ class MainActivity : AppCompatActivity() {
         //Через интент передаем флаги в активити и запускаем ее
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
+        //Или переход на сайт УРБАН как в ДЗ с простым уведомлением
+        val link = "https://urban-university.ru/"
+        val webIntent =Intent(Intent.ACTION_VIEW, Uri.parse(link))
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Степень важности уведомления
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -145,11 +150,11 @@ class MainActivity : AppCompatActivity() {
                 //Заголовок уведомления
                 .setContentTitle(getString(R.string.simple_notification_btn))
                 //Содержание уведомления
-                .setContentText("Текст обычного уведомления - Внимание! Ахтунг!!")
+                .setContentText(getString(R.string.axtyng_text))
                 //Приоритет уведомления
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                //Через интенет переходим на Майн Активити( так задумано)
-                .setContentIntent(pendingIntent)
+                //Через интенет переходим на сайт УРБАН( так задумано в ДЗ)
+                .setContentIntent(PendingIntent.getActivity(this,0,webIntent,PendingIntent.FLAG_IMMUTABLE))
                 //Автоматическая отмена при нажатии
                 .setAutoCancel(true)
             with(NotificationManagerCompat.from(applicationContext)) {
