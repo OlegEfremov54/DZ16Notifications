@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     companion object {
-        const val Notification_ID = 1
+        const val Notification_ID = 101
         const val CHANNEL_ID = "channelID"
     }
 
@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private var notificationCounter = 1
 
+    //Проверка Исключений - Разрешений
     private val requestPermissionsLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
         ActivityResultCallback { permissions ->
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     )
-
+    //Проверка Исключений - Разрешений
     private fun checkAndRequestPermission(vararg permissionCodes: String): Boolean {
 
         var permissionIsGranted = false
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         return permissionIsGranted
     }
 
+    //Метод преобразования картинок
     private fun getBitmapFromResource(drawableResource: Int) : Bitmap {
         val drawable = resources.getDrawable(drawableResource)
         val canvas = Canvas()
@@ -103,57 +105,78 @@ class MainActivity : AppCompatActivity() {
         //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         //toolbarMain.setNavigationOnClickListener { onBackPressed() }
 
+        //Реакция на уведомление - просто переход на майн Активити. Как пример
         val intent = Intent(this, MainActivity::class.java)
         intent.apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-
+        //Через интент передаем флаги в активити и запускаем ее
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //Степень важности уведомления
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, "Уведомление", importance)
             notificationManager =
                 applicationContext.getSystemService(NotificationManager::class.java)
             notificationManager?.createNotificationChannel(channel)
         }
-
+        // Вешаем слушатель на короткое нажатие кнопка Удалить Уведомление
         binding.removeNotificationBtn.setOnClickListener {
+            //уменьшаем на единицу
             notificationCounter--
+            //отменяем последнее
             notificationManager?.cancel(notificationCounter)
         }
-
+        // При длинном нажатие удаляем все уведомления
         binding.removeNotificationBtn.setOnLongClickListener() {
             notificationCounter = Notification_ID
             notificationManager?.cancelAll()
             true
         }
-
+        // Слушатель на кнопку Обычное Уведомление
         binding.simpleNotificationBtn.setOnClickListener {
+            //Собиираем Уведомление
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                //Иконка уведомления и большая иконка
                 .setSmallIcon(R.drawable.ic_simple_notification)
+                //При помощи декод ресурса получаем большую Иконку
                 .setLargeIcon(getBitmapFromResource(R.drawable.ic_simple_notification))
+                //Заголовок уведомления
                 .setContentTitle(getString(R.string.simple_notification_btn))
+                //Содержание уведомления
                 .setContentText("Текст обычного уведомления - Внимание! Ахтунг!!")
+                //Приоритет уведомления
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                //Через интенет переходим на Майн Активити( так задумано)
                 .setContentIntent(pendingIntent)
+                //Автоматическая отмена при нажатии
                 .setAutoCancel(true)
             with(NotificationManagerCompat.from(applicationContext)) {
+                //Проверка на наличие разрешений
                 if (checkAndRequestPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+                    //Вызываем нотифай и функция Билд  у Билдера
                     notify(notificationCounter++, builder.build())
                 }
             }
         }
-
+        // Слушатель кнопки Уведомления с Большим текстом
         binding.bigTextStyleNotificationBtn.setOnClickListener {
+            //Создаем билдер
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                //Иконка
                 .setSmallIcon(R.drawable.ic_bigtext_style_notification)
+                //Текст сообщения
                 .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.big_text)))
+                // Заголовок текста
                 .setContentTitle(getString(R.string.big_text_style_notification))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
+                //Одобряем автоматическую отмену
                 .setAutoCancel(true)
+            //Запускаем Уведомление
             with(NotificationManagerCompat.from(applicationContext)) {
+                //если есть разрешения то увеличиваем на единицу Каунтер и собираем ( запускаем) Билдер
                 if (checkAndRequestPermission(Manifest.permission.POST_NOTIFICATIONS)) {
                     notify(notificationCounter++, builder.build())
                 }
@@ -183,10 +206,10 @@ class MainActivity : AppCompatActivity() {
                 .setContentText("Внутри какой-то список")
                 .setSubText("Список")
                 .setStyle(NotificationCompat.InboxStyle()
-                    .addLine("Я вас любил")
-                    .addLine("Любовь еще быть может")
-                    .addLine("В душе моей осталась насовсем")
-                    .addLine("Но пусть она вас больше не тревожит"))
+                    .addLine("Письмо 1. Я вас любил")
+                    .addLine("Письмо 2. Любовь еще быть может")
+                    .addLine("Письмо 3. В душе моей осталась насовсем")
+                    .addLine("Письмо 4. Но пусть она вас больше не тревожит"))
                 .setContentTitle(getString(R.string.inbox_style_notification))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
@@ -199,16 +222,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.messagingStyleNotificationBtn.setOnClickListener {
+            //Юзер Первое лицо
             val user = Person.Builder().setName("Вы").build()
+            //Юзер  с кем переписываемся
             val personOne = Person.Builder().setName("Марь Иванна").build()
-
 
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_messaging_style_notification)
                 .setContentText("Внутри какой-то список")
                 .setSubText("Список")
                 .setStyle(NotificationCompat.MessagingStyle(user)
-                    .setConversationTitle("Какая-нибудь переписка")
+                    .setConversationTitle("Переписка с Классным руководителем сына")
                     .addMessage("Здравствуйте!", System.currentTimeMillis(), personOne)
                     .addMessage("Добрый день", System.currentTimeMillis(), user)
                     .addMessage("Мой что то опять натворил в школе??", System.currentTimeMillis(), user)
@@ -237,6 +261,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra("NOTIFICATION_ID", notificationCounter)
             }
 
+            //Создаем пендинг интент применяемыйй при отказе от Открытия сообщения
             val deletePendingIntent = PendingIntent.getBroadcast(
                 this,
                 0,
@@ -244,12 +269,18 @@ class MainActivity : AppCompatActivity() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
             val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                //Иконки
                 .setSmallIcon(R.drawable.ic_action_notification)
                 .setLargeIcon(getBitmapFromResource(R.drawable.ic_action_notification))
+                //Титл
                 .setContentTitle(getString(R.string.action_notification))
-                .setContentText("Вы хотите открыть приложение, от которого пришло уведомление?")
+                //Текст уведомления
+                .setContentText(getString(R.string.action_text))
+                //Приоритет уведомления
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                //создаем кнопку Принять
                 .addAction(R.drawable.ic_check, "Принять", pendingIntent)
+                //Создаем кнопку Отменить
                 .addAction(R.drawable.ic_cancel, "Отменить", deletePendingIntent)
                 .setAutoCancel(true)
             with(NotificationManagerCompat.from(applicationContext)) {
